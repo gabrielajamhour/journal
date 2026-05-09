@@ -10,53 +10,66 @@ export default function JournalPage({ entry, isFlipping }) {
                 fontFamily: "serif",
             }}
         >
-            {/*Book container*/}
+            {/* Book container */}
             <div
                 style={{
                     display: "flex",
                     width: "900px",
                     height: "600px",
+                    flexShrink: 0,
                     perspective: "2000px",
                     boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
                     borderRadius: "6px",
                     overflow: "hidden",
                 }}
             >
-                {/*LEFT PAGE*/}
+                {/* Left Page */}
                 <div
                     style={{
-                        flex: 1,
-                        background: "#f7f1e3",
+                        width: "450px",
+                        background: "#fbf7ef",
                         padding: "40px",
-                        borderRight: "1px solid rbga(0, 0, 0, 0.1)",
-
-                        transformOrigin: "left center", // rotate like a real page attached at the spine
-                        transformStyle: "preserve-3d", // allows 3D transforms
-                        transition: "transform 0.6s ease", // makes transforms animate smoothly
-                        transform: isFlipping ? "rotateY(-120deg)" : "rotateY(0deg)",
-
-                        cursor: "pointer",
                     }}
                 >
                     <h2 style={{ marginTop: 0 }}>{entry.title}</h2>
                     <p style={{ lineHeight: 1.6 }}>{entry.content}</p>
                 </div>
 
-                {/*RIGHT PAGE*/}
+                {/* Right Page*/}
                 <div
                     style={{
-                        flex: 1,
-                        background: "#fbf7ef",
-                        padding: "40px",
+                        width: "450px",
+                        boxSizing: "border-box",
+                        flexShrink: 0,
+                        position: "relative",
+                        transformOrigin: "left center", // rotate like a real page attached at the spine
+                        transformStyle: "preserve-3d", // allows 3D transforms
+                        transition: "transform 0.68s ease", // makes transforms animate smoothly
+                        transform: isFlipping ? "rotateY(-180deg)" : "rotateY(0deg)",
+                        overflow: "hidden",
+
+                        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.08)",
                     }}
                 >
-                    <h3 style={{ marginTop: 0 }}>Notes</h3>
-                    <p style={{ opacity: 0.7 }}>
-                        This is the right page of the journal. You can later use this for
-                        reflections, sketches, or secondary content.
-                    </p>
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            boxSizing: "border-box",
+                            background: "#f7f1e3",
+                            padding: "40px",
+
+                            backfaceVisibility: "hidden",
+                            WebkitBackfaceVisibility: "hidden",
+
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                        }}
+                    >
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

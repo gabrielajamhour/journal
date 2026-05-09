@@ -34,7 +34,7 @@ export default function App() {
     <div
       style={{
         opacity: isAnimating ? 0 : 1,
-        transition: "opacity 0.2 ease",
+        transition: "opacity 0.2s ease",
       }}
     >
       <JournalPage 
