@@ -1,4 +1,4 @@
-export default function JournalPage({ entry }) {
+export default function JournalPage({ entry, isFlipping }) {
     return (
         <div
             style={{
@@ -16,6 +16,7 @@ export default function JournalPage({ entry }) {
                     display: "flex",
                     width: "900px",
                     height: "600px",
+                    perspective: "2000px",
                     boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
                     borderRadius: "6px",
                     overflow: "hidden",
@@ -28,6 +29,13 @@ export default function JournalPage({ entry }) {
                         background: "#f7f1e3",
                         padding: "40px",
                         borderRight: "1px solid rbga(0, 0, 0, 0.1)",
+
+                        transformOrigin: "left center", // rotate like a real page attached at the spine
+                        transformStyle: "preserve-3d", // allows 3D transforms
+                        transition: "transform 0.6s ease", // makes transforms animate smoothly
+                        transform: isFlipping ? "rotateY(-120deg)" : "rotateY(0deg)",
+
+                        cursor: "pointer",
                     }}
                 >
                     <h2 style={{ marginTop: 0 }}>{entry.title}</h2>
