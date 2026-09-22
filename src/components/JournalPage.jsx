@@ -1,75 +1,84 @@
-export default function JournalPage({ entry, isFlipping }) {
-    return (
+import FlippingPage from "./FlippingPage";
+
+export default function JournalPage({
+  leftEntry,
+  rightEntry,
+  flippingEntry,
+  flippingKey,
+  onFlipEnd,
+}) {
+  return (
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#e9e4d8",
+        fontFamily: "serif",
+      }}
+    >
+      {/* Book container. `position: relative` so the flipping overlay
+          can be positioned absolutely on top of the right page. */}
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          width: "900px",
+          height: "600px",
+          flexShrink: 0,
+          perspective: "2000px",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
+          borderRadius: "6px",
+          overflow: "hidden",
+        }}
+      >
+        {/* Left page — always static, never animates */}
         <div
-            style={{
-                height: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "#e9e4d8",
-                fontFamily: "serif",
-            }}
+          style={{
+            width: "450px",
+            boxSizing: "border-box",
+            background: "#fbf7ef",
+            padding: "40px",
+            overflow: "hidden",
+          }}
         >
-            {/* Book container */}
-            <div
-                style={{
-                    display: "flex",
-                    width: "900px",
-                    height: "600px",
-                    flexShrink: 0,
-                    perspective: "2000px",
-                    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
-                    borderRadius: "6px",
-                    overflow: "hidden",
-                }}
-            >
-                {/* Left Page */}
-                <div
-                    style={{
-                        width: "450px",
-                        background: "#fbf7ef",
-                        padding: "40px",
-                    }}
-                >
-                    <h2 style={{ marginTop: 0 }}>{entry.title}</h2>
-                    <p style={{ lineHeight: 1.6 }}>{entry.content}</p>
-                </div>
+          {leftEntry && (
+            <>
+              <h2 style={{ marginTop: 0 }}>{leftEntry.title}</h2>
+              <p style={{ lineHeight: 1.6 }}>{leftEntry.content}</p>
+            </>
+          )}
+        </div>
 
-                {/* Right Page*/}
-                <div
-                    style={{
-                        width: "450px",
-                        boxSizing: "border-box",
-                        flexShrink: 0,
-                        position: "relative",
-                        transformOrigin: "left center", // rotate like a real page attached at the spine
-                        transformStyle: "preserve-3d", // allows 3D transforms
-                        transition: "transform 0.68s ease", // makes transforms animate smoothly
-                        transform: isFlipping ? "rotateY(-180deg)" : "rotateY(0deg)",
-                        overflow: "hidden",
+        {/* Right page underneath — always shows the DESTINATION content.
+            During a flip, the overlay physically covers this until it
+            has rotated past ~90deg, at which point backfaceVisibility
+            hides the overlay's front face and this becomes visible. */}
+        <div
+          style={{
+            width: "450px",
+            boxSizing: "border-box",
+            background: "#f7f1e3",
+            padding: "40px",
+            overflow: "hidden",
+          }}
+        >
+          {rightEntry && (
+            <>
+              <h2 style={{ marginTop: 0 }}>{rightEntry.title}</h2>
+              <p style={{ lineHeight: 1.6 }}>{rightEntry.content}</p>
+            </>
+          )}
+        </div>
 
-                        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.08)",
-                    }}
-                >
-                    <div
-                        style={{
-                            position: "absolute",
-                            inset: 0,
-                            boxSizing: "border-box",
-                            background: "#f7f1e3",
-                            padding: "40px",
-
-                            backfaceVisibility: "hidden",
-                            WebkitBackfaceVisibility: "hidden",
-
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "flex-start",
-                        }}
-                    >
-                    </div>
-                </div>
-            </div>
-        </div >
-    );
+        {/* Flipping overlay — only exists while a flip is happening.
+            `key={flippingKey}` forces a fresh DOM node per flip, so a
+            transition never has old state left over to reverse from. */}
+        {flippingEntry && (
+          <FlippingPage key={flippingKey} entry={flippingEntry} onFlipEnd={onFlipEnd} />
+        )}
+      </div>
+    </div>
+  );
 }
